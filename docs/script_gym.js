@@ -120,13 +120,13 @@ function getAssetURL(pokemonId, pokemonLevel, is_exclusive) {
 
   if (pokemonId == 0) {
     if (is_exclusive) {
-      return '//assets-' + assetServer.toString() + '.' + currentTopDomainName + '/images/poke_number/0_ex.png?' + VERSION;
+      return '//assets-' + assetServer.toString() + '.' + currentTopDomainName + '/images/poke_number/0_ex.png?' + version;
     }
 
     if (pokemonLevel) {
-      return '//assets-' + assetServer.toString() + '.' + currentTopDomainName + '/images/poke_number/' + pokemonId + '_' + pokemonLevel + '.png?' + VERSION;
+      return '//assets-' + assetServer.toString() + '.' + currentTopDomainName + '/images/poke_number/' + pokemonId + '_' + pokemonLevel + '.png?' + version;
     }
-    return '//assets-' + assetServer.toString() + '.' + currentTopDomainName + '/images/poke_number/' + pokemonId + '.png?' + VERSION;
+    return '//assets-' + assetServer.toString() + '.' + currentTopDomainName + '/images/poke_number/' + pokemonId + '.png?' + version;
   }
 
   if (localStorage.getItem('icon'+pokemonId)) {
@@ -134,7 +134,7 @@ function getAssetURL(pokemonId, pokemonLevel, is_exclusive) {
   }
 
 
-  return '//assets-' + assetServer.toString() + '.' + currentTopDomainName + '/images/poke_number/' + pokemonId + '.png?' + VERSION;
+  return '//assets-' + assetServer.toString() + '.' + currentTopDomainName + '/images/poke_number/' + pokemonId + '.png?' + version;
 }
 
 function pokeHTML(pokemon, shouldHide) {
@@ -193,7 +193,7 @@ function locateMeButton() {
     shouldShowLocationError = false;
     if (!locationMarker) {
       var iconOptions = {
-        iconUrl: 'images/your_location.png?' + VERSION,
+        iconUrl: 'images/your_location.png?' + version,
         iconAnchor: [12, 25],
         iconSize: [25, 25],
         zIndexOffset: 1000

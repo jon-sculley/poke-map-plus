@@ -115,7 +115,7 @@ function locateMeButton() {
   map.on('locationfound', function (e) {
     if (!locationMarker) {
       var iconOptions = {
-        iconUrl: 'images/your_location.png?' + VERSION,
+        iconUrl: 'images/your_location.png?' + version,
         iconAnchor: [12, 25],
         iconSize: [25, 25],
         zIndexOffset: 1000

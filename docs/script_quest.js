@@ -153,7 +153,7 @@ L.HtmlIcon = L.Icon.extend({
 
 function getAssetURL(quest) {
   if (quest.image.indexOf('pokemon') == -1) {
-    return '/images/quest/' + quest.image + '.png?' + VERSION;
+    return '/images/quest/' + quest.image + '.png?' + version;
   }
   else {
     var tmpArray =  quest.image.split('_');
@@ -162,7 +162,7 @@ function getAssetURL(quest) {
       return localStorage.getItem('icon'+pokemonId);
     }
     else {
-      return '/images/poke_number/' + pokemonId + '.png?' + VERSION;
+      return '/images/poke_number/' + pokemonId + '.png?' + version;
     }
   }
   return "";
@@ -198,7 +198,7 @@ function locateMeButton() {
     shouldShowLocationError = false;
     if (!locationMarker) {
       var iconOptions = {
-        iconUrl: 'images/your_location.png?' + VERSION,
+        iconUrl: 'images/your_location.png?' + version,
         iconAnchor: [12, 25],
         iconSize: [25, 25],
         zIndexOffset: 1000
@@ -419,7 +419,7 @@ function processNewFilter(filterData) {
     }
 
     filterHTMLString += '<div class="filter_checkbox">';
-    filterHTMLString += ('<input {checkedString} id="{checkbox_group_id}" type="checkbox" value="{valueString}"><label for="{checkbox_group_id}"><img src="images/quest/quest_stardust.png?' + VERSION + '" style="max-height: 10px"> {amount} </label>').formatUnicorn({
+    filterHTMLString += ('<input {checkedString} id="{checkbox_group_id}" type="checkbox" value="{valueString}"><label for="{checkbox_group_id}"><img src="images/quest/quest_stardust.png?' + version + '" style="max-height: 10px"> {amount} </label>').formatUnicorn({
       amount: filterData.t3[i],
       valueString: valueString,
       checkedString: checkedString,
@@ -472,7 +472,7 @@ function processNewFilter(filterData) {
       reward_url = localStorage.getItem('icon'+reward);
     }
     else {
-      reward_url = '/images/poke_number/' + reward + '.png?' + VERSION;
+      reward_url = '/images/poke_number/' + reward + '.png?' + version;
     }
 
     let checkbox_group_id = 'checkbox_pokemon_' + getPokemonName({ id: reward });
@@ -481,7 +481,7 @@ function processNewFilter(filterData) {
     }
 
     filterHTMLString += '<div class="filter_checkbox">';
-    filterHTMLString += ('<input {checkedString} id="{checkbox_group_id}" type="checkbox" value="7,0,{reward}"><label for="{checkbox_group_id}"><img src="{reward_url}?' + VERSION + '" style="max-height: 20px"> {pokemon_name} </label>').formatUnicorn({
+    filterHTMLString += ('<input {checkedString} id="{checkbox_group_id}" type="checkbox" value="7,0,{reward}"><label for="{checkbox_group_id}"><img src="{reward_url}?' + version + '" style="max-height: 20px"> {pokemon_name} </label>').formatUnicorn({
       reward: reward,
       reward_url: reward_url,
       pokemon_name: getPokemonName({
@@ -522,7 +522,7 @@ function processNewFilter(filterData) {
   for (var i = 0; i < filterData.t2.length; ++i) {
 
     var reward = filterData.t2[i];
-    var reward_url = ('/images/quest/quest_item_{reward}.png?' + VERSION).formatUnicorn({
+    var reward_url = ('/images/quest/quest_item_{reward}.png?' + version).formatUnicorn({
       reward: reward
     });
 
@@ -541,7 +541,7 @@ function processNewFilter(filterData) {
     }
 
     filterHTMLString += '<div class="filter_checkbox">';
-    filterHTMLString += ('<input {checkedString} id="{checkbox_group_id}" type="checkbox" value="2,0,{reward}"><label for="{checkbox_group_id}"><img src="{reward_url}?' + VERSION + '" style="max-height: 20px"> {item_name} </label>').formatUnicorn({
+    filterHTMLString += ('<input {checkedString} id="{checkbox_group_id}" type="checkbox" value="2,0,{reward}"><label for="{checkbox_group_id}"><img src="{reward_url}?' + version + '" style="max-height: 20px"> {item_name} </label>').formatUnicorn({
       reward: reward,
       reward_url: reward_url,
       item_name: itemDict["item" + reward],
