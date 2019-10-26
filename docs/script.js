@@ -475,6 +475,18 @@ function addFilterElements() {
   return index;
 }
 
+function addAllFilterElements() {
+  for (let index = 1; index <= 100; index++) {
+    let filterText = localStorage.getItem('home_filter_' + index);
+    if (filterText) {
+      addFilterElements();
+      $('#filter_name_' + index).html(JSON.parse(filterText).name);
+    } else {
+      break;
+    }
+  }
+}
+
 function filterPokemonList() {
   let gen = parseInt($('#pokemon_generation').val());
   let pokemonFirstIndex = [1, 1, 152, 252, 387, 494][gen];
@@ -524,7 +536,7 @@ function initMap() {
     let savedFilters = $('#saved_filters');
     savedFilters.css('padding', '10px').css('font-family', '-apple-system, Helvetica, Arial, sans-serif');
     savedFilters.append($('<span>').html('Saved Filters').css('font-weight', 'bold'));
-    savedFilters.append($('<div>', {id: 'all_filter_div'}).css('margin-top', '15px').css('margin-bottom', '15px')).append($('<input>', {type: 'button', name: 'filter_add', id: 'filter_add', value: 'Add Filter'}).css('margin-right', '10px')).append($('<input>', {type: 'button', name: 'filter_remove', id: 'filter_remove', value: 'Remove Filter'}));
+    savedFilters.append($('<div>', {id: 'all_filter_div'}).css('margin-top', '15px').css('margin-bottom', '15px')).append($('<input>', {type: 'button', name: 'filter_add', id: 'filter_add', value: 'Add Filter'}).css('margin-right', '5px')).append($('<input>', {type: 'button', name: 'filter_remove', id: 'filter_remove', value: 'Remove Filter'}).css('margin-right', '5px')).append($('<input>', {type: 'button', name: 'filters_reload', id: 'filters_reload', value: 'Reload Filters'}));
 
     filter.append($('<div>', {id: 'instant_filter'}));
     let instantFilter = $('#instant_filter');
@@ -545,15 +557,7 @@ function initMap() {
       pokemonList.append($('<div>', {id: 'pokemon_div_' + pokeArray[i].i}).css('margin-top', '5px').append($('<input>', {type: 'checkbox', id: 'pokemon_checkbox_' + pokeArray[i].i})).append($('<label>', {for: 'pokemon_checkbox_' + pokeArray[i].i}).append($('<img>', {src: 'https://pkmref.com/images/set_1/' + pokeArray[i].i + '.png'}).css('max-height', '25px')).append($('<span>').text(pokeArray[i].i + ' - ' + pokeArray[i].n).css('margin-left', '5px'))));
     }
 
-    for (let index = 1; index <= 100; index++) {
-      let filterText = localStorage.getItem('home_filter_' + index);
-      if (filterText) {
-        addFilterElements();
-        $('#filter_name_' + index).html(JSON.parse(filterText).name);
-      } else {
-        break;
-      }
-    }
+    addAllFilterElements();
 
     $('#filter_add').click(function() {
       let index = addFilterElements();
@@ -575,9 +579,25 @@ function initMap() {
       }
     });
 
+    $('#filters_reload').click(function () {
+      if (confirm('Do you really want to replace all filters with the defaults?')) {
+        $.getJSON('https://jon-sculley.github.io/poke-map-plus/home_filters.json', function (data) {
+          if (data && data.length > 0) {
+            for (let index = 1; index <= 100; index++) {
+              localStorage.removeItem('home_filter_' + index);
+            }
+            $('#all_filter_div').empty();
+            for (let i = 0; i < data.length; i++) {
+              localStorage.setItem('home_filter_' + (i + 1), data[i]);
+            }
+            addAllFilterElements();
+          }
+        });
+      }
+    });
+
     $('#instant_filter_enable').change(function () {
       updateFilters();
-      // refreshPokemons();
     });
 
     $('#pokemon_select_all').click(function() {
