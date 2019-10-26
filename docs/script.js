@@ -588,7 +588,7 @@ function initMap() {
             }
             $('#all_filter_div').empty();
             for (let i = 0; i < data.length; i++) {
-              localStorage.setItem('home_filter_' + (i + 1), data[i]);
+              localStorage.setItem('home_filter_' + (i + 1), JSON.stringify(data[i]));
             }
             addAllFilterElements();
           }
