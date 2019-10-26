@@ -693,7 +693,7 @@ function infoWindowString(quest) {
   if (pbDevices) {
     pbDevices = JSON.parse(pbDevices);
     for (let i = 0; i < pbDevices.length; i++) {
-      coordsString += ' | <a href="javascript:pbCoords(' + i + ',' + pokemon.lat + ',' + pokemon.lng + ')">' + pbDevices[i].name + '</a>';
+      coordsString += ' | <a href="javascript:pbCoords(' + i + ',' + quest.lat + ',' + quest.lng + ')">' + pbDevices[i].name + '</a>';
     }
   }
   return "<strong>Pókestop Name:</strong> " + quest.pokestop_name + "<br/><br/><strong>Quest:</strong> " + quest.conditions_string + "<br/><br/><strong>Reward:</strong> " + quest.rewards_string + "<br/><a href='https://maps.google.com/maps?q=" + quest.lat + "," + quest.lng + "'>Maps</a>" + coordsString;

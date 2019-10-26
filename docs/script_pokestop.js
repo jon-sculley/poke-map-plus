@@ -385,7 +385,7 @@ function infoWindowString(pokestop) {
   if (pbDevices) {
     pbDevices = JSON.parse(pbDevices);
     for (let i = 0; i < pbDevices.length; i++) {
-      coordsString += ' | <a href="javascript:pbCoords(' + i + ',' + pokemon.lat + ',' + pokemon.lng + ')">' + pbDevices[i].name + '</a>';
+      coordsString += ' | <a href="javascript:pbCoords(' + i + ',' + pokestop.lat + ',' + pokestop.lng + ')">' + pbDevices[i].name + '</a>';
     }
   }
   return "<strong>Team Rocket has invaded!</strong><br/><br/>\

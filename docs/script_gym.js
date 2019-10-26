@@ -699,7 +699,7 @@ function infoWindowString(pokemon) {
   if (pbDevices) {
     pbDevices = JSON.parse(pbDevices);
     for (let i = 0; i < pbDevices.length; i++) {
-      coordsString += ' | <a href="javascript:pbCoords(' + i + ',' + pokemon.lat + ',' + pokemon.lng + ')">' + pbDevices[i].name + '</a>';
+      coordsString += ' | <a href="javascript:pbCoords(' + i + ',' + pokemon.center.lat + ',' + pokemon.center.lng + ')">' + pbDevices[i].name + '</a>';
     }
   }
 
