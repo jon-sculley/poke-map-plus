@@ -397,7 +397,12 @@ function infoWindowString(pokemon) {
   let cpString = '';
   if (pokemon.attack !== -1 && pokemon.defence !== -1 && pokemon.stamina !== -1 && pokemon.move1 !== -1 && pokemon.move2 !== -1 && pokemon.cp !== -1) {
     ivString = '<b>IV:</b> '+ pokemon.attack + ' | ' + pokemon.defence + ' | ' + pokemon.stamina + ' (' + Math.floor((pokemon.attack + pokemon.defence + pokemon.stamina)/45 * 100) + '%)<br />';
-    movesetString = '<b>Moveset:</b> ' + (movesDict[pokemon.move1] || pokemon.move1) + ' | ' + (movesDict[pokemon.move2] || pokemon.move2) + ' (' + rankDict[pokemon.id].m[pokemon.move1 + ',' + pokemon.move2] + ')<br />';
+    movesetString = '<b>Moveset:</b> ' + (movesDict[pokemon.move1] || pokemon.move1) + ' | ' + (movesDict[pokemon.move2] || pokemon.move2);
+    let movesetRank = rankDict[pokemon.id].m[pokemon.move1 + ',' + pokemon.move2];
+    if (movesetRank) {
+      movesetString += ' (' + movesetRank + ')';
+    }
+    movesetString += '<br />';
     cpString = '<b>CP:</b> ' + pokemon.cp + ' (Level: ' + pokemon.level + ')<br /><br />';
   }
   // let coordsString = ' | <a href="javascript:navigator.clipboard.writeText(\'' + pokemon.lat + ',' + pokemon.lng + '\').then(() => { });">Coords</a>';
@@ -410,7 +415,8 @@ function infoWindowString(pokemon) {
     }
   }
   let wikiLink = 'https://pokemongo.gamepress.gg/pokemon/' + pokemon.id + (formDict['' + pokemon.form] === 'Alola' ? '-alolan' : '');
-  return '<b><a href="' + wikiLink + '" target="_blank">' + pokeDict[pokemon.id]['name'] + disguiseString + genderString + formString + "</a></b><br /><br />" + weatherString + ivString + movesetString + cpString + timeToString(pokemon.remainingTime()) + ' | <a target="_blank" href="https://maps.google.com/maps?q=' + pokemon.lat + ',' + pokemon.lng + '">Maps</a>' + coordsString;
+  let ratingString = ' ' + rankDict[pokemon.id].r + ' / 5';
+  return '<b><a href="' + wikiLink + '" target="_blank">' + pokeDict[pokemon.id]['name'] + disguiseString + genderString + formString + "</a>" + ratingString + "</b><br /><br />" + weatherString + ivString + movesetString + cpString + timeToString(pokemon.remainingTime()) + ' | <a target="_blank" href="https://maps.google.com/maps?q=' + pokemon.lat + ',' + pokemon.lng + '">Maps</a>' + coordsString;
 }
 
 function loadPokemonList() {
