@@ -175,11 +175,15 @@ function updateFilters() {
 function passFilters(pokemon) {
   for (let i = 0; i < currentFilters.length; i++) {
     if (currentFilters[i].pokemons[pokemon.id] && pokemon.iv >= currentFilters[i].min_iv && pokemon.level >= currentFilters[i].min_level && pokemon.cp >= currentFilters[i].min_cp) {
-      let movesetRank = 0;
-      if (pokemon.move1 !== -1 && pokemon.move2 !== -1) {
-        movesetRank = rankToInt[rankDict[pokemon.id].m[pokemon.move1 + ',' + pokemon.move2]];
+      if (currentFilters[i].min_moveset_rank === 0) {
+        return true;
+      } else {
+        let movesetRank = 0;
+        if (pokemon.move1 !== -1 && pokemon.move2 !== -1) {
+          movesetRank = rankToInt[rankDict[pokemon.id].m[pokemon.move1 + ',' + pokemon.move2]];
+        }
+        return movesetRank >= currentFilters[i].min_moveset_rank;
       }
-      return movesetRank >= currentFilters[i].min_moveset_rank;
     }
   }
   return false;
