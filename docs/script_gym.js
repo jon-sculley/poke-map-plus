@@ -1,4 +1,4 @@
-let EXPECTED_VERSIONS = {'nycpokemap.com':'ver626','sgpokemap.com':'ver648','vanpokemap.com':'ver632','sydneypogomap.com':'ver625'};
+let EXPECTED_VERSIONS = {'nycpokemap.com':'ver627','sgpokemap.com':'ver649','vanpokemap.com':'ver633','sydneypogomap.com':'ver626'};
 let MAP_CENTERS = {'nycpokemap.com':[40.696336,-73.923997],'sgpokemap.com':[1.3521,103.8198],'vanpokemap.com':[49.277877,-123.119785],'sydneypogomap.com':[-33.873906,151.200785]};
 
 let version = document.currentScript.src.split('/').pop().split('?').pop();
@@ -983,16 +983,14 @@ function initMap() {
       return false;
     });
 
-    var tilesServer = 'https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoiam9uYXRoYW5zY3VsbGV5IiwiYSI6ImhZa2xhM2sifQ._e0HJ8mu3nPev5Kki06F3w';
-    var defaultMaxZoom = 17;
-    var defaultMinZoom = 10;
+    let tilesServer = 'https://api.mapbox.com/styles/v1/jonathansculley/ck2e4boyw20l21cphp91ln4xx/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoiam9uYXRoYW5zY3VsbGV5IiwiYSI6ImhZa2xhM2sifQ._e0HJ8mu3nPev5Kki06F3w';
 
-    var mapAttribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
+    let mapAttribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
 
     L.tileLayer(tilesServer, {
-      maxZoom: defaultMaxZoom,
-      attribution: mapAttribution,
-      minZoom: defaultMinZoom
+      maxZoom: 17,
+      minZoom: 9,
+      attribution: mapAttribution
     }).addTo(map);
 
     //check filter checked
