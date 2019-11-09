@@ -25,9 +25,9 @@ var hashPokemonLng = 0;
 var min_iv;
 min_iv = 0;
 
-var grunts=[{name:"grunt",characters:[4,5]},{name:"bug",characters:[6,7]},{name:"ghost",characters:[8,9]},{name:"dark",characters:[10,11]},{name:"dragon",characters:[12,13]},{name:"fairy",characters:[14,15]},{name:"fighting",characters:[16,17]},{name:"fire",characters:[18,19]},{name:"flying",characters:[20,21]},{name:"grass",characters:[22,23]},{name:"ground",characters:[24,25]},{name:"ice",characters:[26,27]},{name:"metal",characters:[28,29]},{name:"normal",characters:[30,31]},{name:"poison",characters:[32,33]},{name:"psychic",characters:[34,35]},{name:"rock",characters:[36,37]},{name:"water",characters:[38,39]}];
+var grunts=[{name:"giovanni",characters:[44]},{name:"arlo",characters:[42]},{name:"cliff",characters:[41]},{name:"sierra",characters:[43]},{name:"grunt",characters:[4,5]},{name:"bug",characters:[6,7]},{name:"ghost",characters:[47,48]},{name:"dark",characters:[10,11]},{name:"dragon",characters:[12,13]},{name:"fairy",characters:[14,15]},{name:"fighting",characters:[16,17]},{name:"fire",characters:[18,19]},{name:"flying",characters:[20,21]},{name:"grass",characters:[22,23]},{name:"ground",characters:[24,25]},{name:"ice",characters:[26,27]},{name:"metal",characters:[28,29]},{name:"normal",characters:[30,31]},{name:"poison",characters:[32,33]},{name:"psychic",characters:[34,35]},{name:"rock",characters:[36,37]},{name:"water",characters:[38,39]},{name:"electric",characters:[48,49]}];
 
-var gruntDict={4:"ice",5:"grunt",6:"bug",7:"bug",8:"ghost",9:"ghost",10:"dark",11:"dark",12:"dragon",13:"dragon",14:"fairy",15:"fairy",16:"fighting",17:"fighting",18:"fire",19:"fire",20:"flying",21:"flying",22:"grass",23:"grass",24:"ground",25:"ground",26:"ice",27:"ice",28:"metal",29:"metal",30:"normal",31:"normal",32:"poison",33:"poison",34:"psychic",35:"psychic",36:"rock",37:"rock",38:"water",39:"water"};
+var gruntDict={4:"grunt",5:"grunt",6:"bug",7:"bug",48:"ghost",47:"ghost",10:"dark",11:"dark",12:"dragon",13:"dragon",14:"fairy",15:"fairy",16:"fighting",17:"fighting",18:"fire",19:"fire",20:"flying",21:"flying",22:"grass",23:"grass",24:"ground",25:"ground",26:"ice",27:"ice",28:"metal",29:"metal",30:"normal",31:"normal",32:"poison",33:"poison",34:"psychic",35:"psychic",36:"rock",37:"rock",38:"water",39:"water",49:"electric",50:"electric",41:"cliff",42:"arlo",43:"sierra",44:"giovanni"};
 
 var hostNameArray = window.location.hostname.split('.');
 var currentTopDomainName = hostNameArray.slice(hostNameArray.length - 2).join('.');
@@ -59,7 +59,7 @@ L.HtmlIcon = L.Icon.extend({
 function getAssetURL(pokestop) {
   if (pokestop.invasion_end) {
     return '/images/pokestop/rocket.png?ver625'
-  };
+  }
 
   return "";
 }
@@ -237,6 +237,12 @@ function processNewPokestops(newPokestops) {
   markers = [];
 
   for (var i = 0; i < newPokestops.length; ++i) {
+
+    //skip Giovanni
+    if (parseInt(newPokestops[i]['character']) == 44) {
+      continue;
+    }
+
     var pokestop = new Pokestop(
       newPokestops[i]['lat'],
       newPokestops[i]['lng'],
@@ -378,6 +384,12 @@ function pbCoords(device_index, lat, lng) {
 
 function infoWindowString(pokestop) {
 
+  var gruntType = pokestop.invasionType();
+
+  if (gruntType == 'arlo' || gruntType == 'cliff' || gruntType == 'sierra') {
+    gruntType += " <strong>(Require a Rocket Radar to see.)</strong>";
+  }
+
   var endTime = "<br/><b>Ending in:</b> " + timeToString(pokestop.remainingInvasionTime());
   // let coordsString = ' | <a href="javascript:navigator.clipboard.writeText(\'' + pokestop.lat + ',' + pokestop.lng + '\').then(() => { });">Coords</a>';
   let coordsString = '';
@@ -389,7 +401,7 @@ function infoWindowString(pokestop) {
     }
   }
   return "<strong>Team Rocket has invaded!</strong><br/><br/>\
-<strong>Grunt Type: </strong>" + capitalizedFirstChar(pokestop.invasionType()) + "<br/>\
+<strong>Grunt Type: </strong>" + capitalizedFirstChar(gruntType) + "<br/>\
 <strong>Pókestop Name:</strong> " + pokestop.pokestop_name + endTime + "<br/><br/>\
 <a target='_blank' href='https://maps.google.com/maps?q=" + pokestop.lat + "," + pokestop.lng + "'>Maps</a>" + coordsString;
 }
@@ -656,9 +668,9 @@ function initMap() {
     $('#map').css('top', '40px');
     $('#map').css('bottom', '0px');
 
-    document.getElementById('checkbox_invasion_grunt').nextSibling.childNodes[1].nodeValue = ' Snorlax';
-    document.getElementById('checkbox_invasion_ice').nextSibling.childNodes[0].src = document.getElementById('checkbox_invasion_grunt').nextSibling.childNodes[0].src;
-    document.getElementById('checkbox_invasion_ice').nextSibling.childNodes[1].nodeValue = ' Kanto';
+    // document.getElementById('checkbox_invasion_grunt').nextSibling.childNodes[1].nodeValue = ' Snorlax';
+    // document.getElementById('checkbox_invasion_ice').nextSibling.childNodes[0].src = document.getElementById('checkbox_invasion_grunt').nextSibling.childNodes[0].src;
+    // document.getElementById('checkbox_invasion_ice').nextSibling.childNodes[1].nodeValue = ' Kanto';
 
     var zoomLevel = 11;
     if (window.mobilecheck()) {
