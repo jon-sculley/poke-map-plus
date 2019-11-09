@@ -1,4 +1,4 @@
-let EXPECTED_VERSIONS = {'nycpokemap.com':'ver627','sgpokemap.com':'ver649','vanpokemap.com':'ver633','sydneypogomap.com':'ver626'};
+let EXPECTED_VERSIONS = {'nycpokemap.com':'ver630','sgpokemap.com':'ver657','vanpokemap.com':'ver636','sydneypogomap.com':'ver630'};
 let MAP_CENTERS = {'nycpokemap.com':[40.696336,-73.923997],'sgpokemap.com':[1.3521,103.8198],'vanpokemap.com':[49.277877,-123.119785],'sydneypogomap.com':[-33.873906,151.200785]};
 
 let version = document.currentScript.src.split('/').pop().split('?').pop();
