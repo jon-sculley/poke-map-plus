@@ -492,17 +492,33 @@ function filterPokemonList() {
   let pokemonLastIndex = [1000, 151, 251, 386, 493, 649][gen];
   let searchString = $('#pokemon_search').val().toLowerCase();
   let minRanking = parseInt($('#min_rating').val()) || -1;
+  let searchTokens = searchString.split(',');
+
   for (let i = 0; i < pokeArray.length; i++) {
     let matched = false;
     if (pokeArray[i].i >= pokemonFirstIndex && pokeArray[i].i <= pokemonLastIndex && rankDict[pokeArray[i].i].r >= minRanking) {
-      if (pokeArray[i].n.toLowerCase().indexOf(searchString) === 0) {
-        matched = true;
-      } else {
-        for (let j = 0; j < pokeArray[i].types.length; j++) {
-          if (typeDict[pokeArray[i].types[j]].toLowerCase().indexOf(searchString) === 0) {
+      for (let j = 0; j < searchTokens.length; j++) {
+        let minIndex, maxIndex;
+        let dashIndex = searchTokens[j].indexOf('-');
+        if (dashIndex === -1) {
+          minIndex = maxIndex = parseInt(searchTokens[j]);
+        } else {
+          minIndex = parseInt(searchTokens[j].substring(0, dashIndex));
+          maxIndex = parseInt(searchTokens[j].substring(dashIndex + 1));
+        }
+
+        if (pokeArray[i].n.toLowerCase().indexOf(searchTokens[j]) === 0 || (pokeArray[i].i >= minIndex && pokeArray[i].i <= maxIndex)) {
+          matched = true;
+          break;
+        }
+        for (let k = 0; k < pokeArray[i].types.length; k++) {
+          if (typeDict[pokeArray[i].types[k]].toLowerCase() === searchTokens[j]) {
             matched = true;
             break;
           }
+        }
+        if (matched) {
+          break;
         }
       }
     }
