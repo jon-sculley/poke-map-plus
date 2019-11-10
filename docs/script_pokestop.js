@@ -237,12 +237,6 @@ function processNewPokestops(newPokestops) {
   markers = [];
 
   for (var i = 0; i < newPokestops.length; ++i) {
-
-    //skip Giovanni
-    if (parseInt(newPokestops[i]['character']) == 44) {
-      continue;
-    }
-
     var pokestop = new Pokestop(
       newPokestops[i]['lat'],
       newPokestops[i]['lng'],
@@ -388,6 +382,9 @@ function infoWindowString(pokestop) {
 
   if (gruntType == 'arlo' || gruntType == 'cliff' || gruntType == 'sierra') {
     gruntType += " <strong>(Require a Rocket Radar to see.)</strong>";
+  }
+  else if (gruntType == 'giovanni') {
+    gruntType += " <strong>(Require a Super Rocket Radar to see)</strong>";
   }
 
   var endTime = "<br/><b>Ending in:</b> " + timeToString(pokestop.remainingInvasionTime());
