@@ -25,7 +25,7 @@ var hashPokemonLng = 0;
 var min_iv;
 min_iv = 0;
 
-var grunts=[{name:"giovanni",characters:[44]},{name:"arlo",characters:[42]},{name:"cliff",characters:[41]},{name:"sierra",characters:[43]},{name:"grunt",characters:[4,5]},{name:"bug",characters:[6,7]},{name:"ghost",characters:[47,48]},{name:"dark",characters:[10,11]},{name:"dragon",characters:[12,13]},{name:"fairy",characters:[14,15]},{name:"fighting",characters:[16,17]},{name:"fire",characters:[18,19]},{name:"flying",characters:[20,21]},{name:"grass",characters:[22,23]},{name:"ground",characters:[24,25]},{name:"ice",characters:[26,27]},{name:"metal",characters:[28,29]},{name:"normal",characters:[30,31]},{name:"poison",characters:[32,33]},{name:"psychic",characters:[34,35]},{name:"rock",characters:[36,37]},{name:"water",characters:[38,39]},{name:"electric",characters:[48,49]}];
+var grunts=[{name:"giovanni",characters:[44]},{name:"arlo",characters:[42]},{name:"cliff",characters:[41]},{name:"sierra",characters:[43]},{name:"grunt",characters:[4,5]},{name:"bug",characters:[6,7]},{name:"ghost",characters:[47,48]},{name:"dark",characters:[10,11]},{name:"dragon",characters:[12,13]},{name:"fairy",characters:[14,15]},{name:"fighting",characters:[16,17]},{name:"fire",characters:[18,19]},{name:"flying",characters:[20,21]},{name:"grass",characters:[22,23]},{name:"ground",characters:[24,25]},{name:"ice",characters:[26,27]},{name:"metal",characters:[28,29]},{name:"normal",characters:[30,31]},{name:"poison",characters:[32,33]},{name:"psychic",characters:[34,35]},{name:"rock",characters:[36,37]},{name:"water",characters:[38,39]},{name:"electric",characters:[49,50]}];
 
 var gruntDict={4:"grunt",5:"grunt",6:"bug",7:"bug",48:"ghost",47:"ghost",10:"dark",11:"dark",12:"dragon",13:"dragon",14:"fairy",15:"fairy",16:"fighting",17:"fighting",18:"fire",19:"fire",20:"flying",21:"flying",22:"grass",23:"grass",24:"ground",25:"ground",26:"ice",27:"ice",28:"metal",29:"metal",30:"normal",31:"normal",32:"poison",33:"poison",34:"psychic",35:"psychic",36:"rock",37:"rock",38:"water",39:"water",49:"electric",50:"electric",41:"cliff",42:"arlo",43:"sierra",44:"giovanni"};
 
@@ -166,11 +166,8 @@ function refreshPokestop() {
     }
 
     var character = currentPokestop.invasion_character;
-    var typeToCheck = gruntDict["" + character];
 
-    if (typeToCheck) {
-      shouldRemove = !isPokemonChecked(typeToCheck);
-    }
+    shouldRemove = !isPokemonChecked(character);
 
     if (shouldRemove) {
       removeMarker(marker);
@@ -236,6 +233,13 @@ function processNewPokestops(newPokestops) {
   pokestops = [];
   markers = [];
 
+  let character_counts = {};
+  for (let i = 0; i < grunts.length; i++) {
+    for (let j = 0; j < grunts[i].characters.length; j++) {
+      character_counts[grunts[i].characters[j]] = 0;
+    }
+  }
+
   for (var i = 0; i < newPokestops.length; ++i) {
     var pokestop = new Pokestop(
       newPokestops[i]['lat'],
@@ -250,6 +254,8 @@ function processNewPokestops(newPokestops) {
     if (!pokestop.pokestop_name) {
       pokestop.pokestop_name = "Unknown";
     }
+
+    character_counts[pokestop.invasion_character]++;
 
     var index = indexOfPokestop(pokestop, pokestops);
     if (index == -1) {
@@ -270,11 +276,8 @@ function processNewPokestops(newPokestops) {
       var marker = new L.Marker(markerLocation, {icon: htmlIcon});
 
       var character = pokestop.invasion_character;
-      var typeToCheck = gruntDict["" + character];
 
-      if (typeToCheck) {
-        shouldRemove = !isPokemonChecked(typeToCheck);
-      }
+      shouldRemove = !isPokemonChecked(character);
 
       if (!shouldRemove) {
         marker.addTo(map);
@@ -295,6 +298,25 @@ function processNewPokestops(newPokestops) {
           selectedMarker.bindPopup(infoWindowString(pokestops[index]));
         }
       });
+    }
+  }
+
+  for (let i = 0; i < grunts.length; i++) {
+    let allZero = true;
+    for (let j = 0; j < grunts[i].characters.length; j++) {
+      let label = $('#label_invasion_' + grunts[i].characters[j]);
+      label.text(' Character ' + grunts[i].characters[j] + ' (' + character_counts[grunts[i].characters[j]] + ')');
+      if (character_counts[grunts[i].characters[j]] === 0) {
+        label.parent().hide();
+      } else {
+        label.parent().show();
+        allZero = false;
+      }
+    }
+    if (allZero) {
+      $('#group_invasion_' + grunts[i].name).hide();
+    } else {
+      $('#group_invasion_' + grunts[i].name).show();
     }
   }
 }
@@ -509,14 +531,6 @@ function compare(a, b) {
   }
 }
 
-function firstRun() {
-  if (localStorage.getItem('firstRunPokestop') != "1") {
-    localStorage.setItem('filter_invasion_grunt', "1");
-    localStorage.setItem('filter_invasion_dragon', "1");
-    localStorage.setItem('firstRunPokestop', "1");
-  }
-}
-
 function loadPokemonList() {
   // pokeDict = {};
 //
@@ -529,7 +543,6 @@ function loadPokemonList() {
 //     pokeDict[pokemon['i']] = {"name": pokemon['n'], 'show_filter': show_filter};
 //   }
 
-  firstRun();
   reloadPokestops();
   setInterval(function(){
     refreshPokestop();
@@ -661,13 +674,26 @@ function openFilter() {
 
 function initMap() {
   $(document).ready(function() {
-    // localStorage.setItem('raidToastClick', '1');
     $('#map').css('top', '40px');
     $('#map').css('bottom', '0px');
 
-    // document.getElementById('checkbox_invasion_grunt').nextSibling.childNodes[1].nodeValue = ' Snorlax';
-    // document.getElementById('checkbox_invasion_ice').nextSibling.childNodes[0].src = document.getElementById('checkbox_invasion_grunt').nextSibling.childNodes[0].src;
-    // document.getElementById('checkbox_invasion_ice').nextSibling.childNodes[1].nodeValue = ' Kanto';
+    $('#filter_list_top').empty();
+    $('#filter_list_top').append($('<input>', {type: 'button', id: 'uncheck_all', value: 'Uncheck All'}).css('margin-bottom', '10px'));
+    for (let i = 0; i < grunts.length; i++) {
+      let name = grunts[i].name;
+      if (name === 'metal') {
+        name = 'steel';
+      }
+      let subList = $('<div>');
+      for (let j = 0; j < grunts[i].characters.length; j++) {
+        let checkbox = $('<input>', {type: 'checkbox', id: 'checkbox_invasion_' + grunts[i].characters[j], value: grunts[i].characters[j]});
+        if (isPokemonChecked(grunts[i].characters[j])) {
+          checkbox.prop('checked', true);
+        }
+        subList.append($('<div>').append(checkbox).append($('<label>', {id: 'label_invasion_' + grunts[i].characters[j], for: 'checkbox_invasion_' + grunts[i].characters[j]}).text(' Character ' + grunts[i].characters[j])));
+      }
+      $('#filter_list_top').append($('<div>', {id: 'group_invasion_' + grunts[i].name, class: 'filter_checkbox'}).append($('<img>', {src: 'images/pokestop/type_' + name + '.png'}).css('max-height', '20px')).append($('<span>').text(' ' + name.charAt(0).toUpperCase() + name.slice(1))).append(subList));
+    }
 
     var zoomLevel = 11;
     if (window.mobilecheck()) {
@@ -792,17 +818,6 @@ function initMap() {
       return false;
     });
 
-    for (var i = 0; i < grunts.length; ++i) {
-      var type = grunts[i].name;
-
-      var isFilterCheck = isPokemonChecked(type);
-      var cssId = "#checkbox_invasion_" + type;
-
-      if (isFilterCheck) {
-        $(cssId).prop('checked', true);
-      }
-    }
-
     $('.filter_checkbox input').bind("change", function(data) {
       if (this.checked) {
         checkPokemon(this.value);
@@ -812,6 +827,14 @@ function initMap() {
       }
     });
 
+    $('#uncheck_all').click(function () {
+      for (let i = 0; i < grunts.length; i++) {
+        for (let j = 0; j < grunts[i].characters.length; j++) {
+          $('#checkbox_invasion_' + grunts[i].characters[j]).prop('checked', false);
+          uncheckPokemon(grunts[i].characters[j]);
+        }
+      }
+    });
 
     $('#close_btn').bind('click', function() {
       $('#filter').css('display', 'none');
